@@ -1,22 +1,47 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import { useAppContext } from "../context/AppContex";
 
 const RightAuth = ({ mode }) => {
-  const isLogin = mode === "login";
-
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleSubmit = (e) => {
+  const { login, register } = useAppContext();
+  const navigate = useNavigate();
+
+  const isLogin = mode == "login";
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    if (!isLogin && password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
     setLoading(true);
     // submit logic here
+    try {
+      if (mode == "login") {
+        await login(email, password);
+      } else {
+        await register(name, email, password, confirmPassword);
+      }
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+      setError(
+        err.response?.data?.message ||
+          "Something went wrong. Please try again.",
+      );
+    }
     setLoading(false);
   };
 
@@ -94,7 +119,7 @@ const RightAuth = ({ mode }) => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 className="w-full pl-2 pr-8 py-2 border-b border-zinc-200 focus:outline-none focus:border-indigo-500 text-sm text-zinc-900 bg-transparent placeholder-zinc-300 transition-colors"
-                placeholder="••••••••"
+                placeholder="••••••••••••"
               />
               <button
                 type="button"
@@ -106,6 +131,36 @@ const RightAuth = ({ mode }) => {
               </button>
             </div>
           </div>
+
+          {!isLogin && (
+            <div className="group">
+              <label className="block text-[11px] font-semibold text-zinc-400 uppercase tracking-widest mb-2 group-focus-within:text-indigo-600 transition-colors">
+                Confirm Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  className="w-full pl-2 pr-8 py-2 border-b border-zinc-200 focus:outline-none focus:border-indigo-500 text-sm text-zinc-900 bg-transparent placeholder-zinc-300 transition-colors"
+                  placeholder="••••••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword((s) => !s)}
+                  className="absolute right-1 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-indigo-600 transition-colors"
+                  tabIndex={-1}
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff size={16} />
+                  ) : (
+                    <Eye size={16} />
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
 
           <button
             type="submit"
