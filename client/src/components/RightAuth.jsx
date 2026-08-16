@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import { useAppContext } from "../context/AppContex";
 
 const RightAuth = ({ mode }) => {
-  const isLogin = mode === "login";
-
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
@@ -29,6 +28,20 @@ const RightAuth = ({ mode }) => {
 
     setLoading(true);
     // submit logic here
+    try {
+      if (mode == "login") {
+        await login(email, password);
+      } else {
+        await register(name, email, password, confirmPassword);
+      }
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+      setError(
+        err.response?.data?.message ||
+          "Something went wrong. Please try again.",
+      );
+    }
     setLoading(false);
   };
 
@@ -49,7 +62,7 @@ const RightAuth = ({ mode }) => {
         </div>
 
         {error && (
-          <div role="alert" className="mb-6 p-3 border border-red-200 bg-red-50 text-red-700 text-xs rounded-md">
+          <div className="mb-6 p-3 border border-red-200 bg-red-50 text-red-700 text-xs rounded-md">
             {error}
           </div>
         )}
@@ -57,11 +70,10 @@ const RightAuth = ({ mode }) => {
         <form onSubmit={handleSubmit} className="space-y-6">
           {!isLogin && (
             <div className="group">
-              <label htmlFor="name" className="block text-[11px] font-semibold text-zinc-400 uppercase tracking-widest mb-2 group-focus-within:text-indigo-600 transition-colors">
+              <label className="block text-[11px] font-semibold text-zinc-400 uppercase tracking-widest mb-2 group-focus-within:text-indigo-600 transition-colors">
                 Full Name
               </label>
               <input
-                id="name"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -73,11 +85,10 @@ const RightAuth = ({ mode }) => {
           )}
 
           <div className="group">
-            <label htmlFor="email" className="block text-[11px] font-semibold text-zinc-400 uppercase tracking-widest mb-2 group-focus-within:text-indigo-600 transition-colors">
+            <label className="block text-[11px] font-semibold text-zinc-400 uppercase tracking-widest mb-2 group-focus-within:text-indigo-600 transition-colors">
               Email
             </label>
             <input
-              id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -89,7 +100,7 @@ const RightAuth = ({ mode }) => {
 
           <div className="group">
             <div className="flex items-center justify-between mb-2">
-              <label htmlFor="password" className="block text-[11px] font-semibold text-zinc-400 uppercase tracking-widest group-focus-within:text-indigo-600 transition-colors">
+              <label className="block text-[11px] font-semibold text-zinc-400 uppercase tracking-widest group-focus-within:text-indigo-600 transition-colors">
                 Password
               </label>
               {isLogin && (
@@ -103,7 +114,6 @@ const RightAuth = ({ mode }) => {
             </div>
             <div className="relative">
               <input
-                id="password"
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
