@@ -16,7 +16,7 @@ function LoginLeft() {
 
       {/* Logo */}
       <div className="relative z-10 flex items-center gap-3">
-        <img src="/logo.svg" alt="Builder AI" className="size-9" />
+        <img src="/logo.svg" alt="" className="size-9" />
 
         <span className="text-2xl xl:text-3xl font-semibold tracking-tight text-white">
           Builder AI
