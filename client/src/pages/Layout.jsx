@@ -15,7 +15,7 @@ export const GuestLayout = () => {
   const { user, loadingUser } = useAppContext();
 
   if (loadingUser) return <Loading />;
-  if (user) return <Navigate to="/dashboard" replace />;
+  if (user) return <Navigate to="/" replace />;
 
   return <Outlet />;
 };

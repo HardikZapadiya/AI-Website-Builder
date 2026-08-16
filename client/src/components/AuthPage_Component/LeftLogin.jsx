@@ -1,6 +1,7 @@
 function LoginLeft() {
   return (
-    <div className="relative hidden min-h-screen overflow-hidden bg-cover bg-center bg-no-repeat lg:flex lg:w-2/5 lg:shrink-0 flex-col justify-between p-8 sm:p-10 xl:p-12 select-none"
+    <div
+      className="relative hidden min-h-screen overflow-hidden bg-cover bg-center bg-no-repeat lg:flex lg:w-2/5 lg:shrink-0 flex-col justify-between p-8 sm:p-10 xl:p-12 select-none"
       style={{ backgroundImage: "url('/bg-img.png')" }}
     >
       {/* Overlay */}
@@ -11,7 +12,8 @@ function LoginLeft() {
         <img src="/logo.svg" alt="" className="size-9" />
 
         <span className="text-2xl xl:text-3xl font-semibold tracking-tight text-white">
-          Builder AI
+          Builder AI{" "}
+          <sup className="font-sans text-[10px] text-amber-200">[HD]</sup>
         </span>
       </div>
 
