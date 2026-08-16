@@ -20,18 +20,14 @@ const RightAuth = ({ mode }) => {
     setLoading(true);
 
     try {
-      const endpoint = isLogin ? "/api/auth/login" : "/api/auth/register";
-      const payload = isLogin
-        ? { email, password }
-        : { name, email, password };
-
-      const response = await api.post(endpoint, payload);
-
-      if (response.data) {
-        navigate("/dashboard");
+      if (isLogin) {
+        await api.post("/api/auth/login", { email, password });
+      } else {
+        await api.post("/api/auth/register", { name, email, password });
       }
+      navigate("/dashboard");
     } catch (err) {
-      setError(err.response?.data?.error || "An error occurred. Please try again.");
+      setError(err.response?.data?.message || err.response?.data?.error || "An error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
