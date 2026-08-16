@@ -1,5 +1,5 @@
-import LeftLogin from "../components/LeftLogin";
-import RightAuth from "../components/RightAuth";
+import LeftLogin from "../components/AuthPage_Component/LeftLogin";
+import RightAuth from "../components/AuthPage_Component/RightAuth";
 
 const AuthPage = ({ mode }) => {
   return (

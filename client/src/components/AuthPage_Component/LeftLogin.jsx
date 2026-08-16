@@ -1,14 +1,6 @@
 function LoginLeft() {
   return (
-    <div
-      className="
-        relative hidden min-h-screen overflow-hidden
-        bg-cover bg-center bg-no-repeat
-        lg:flex lg:w-2/5 lg:shrink-0
-        flex-col justify-between
-        p-8 sm:p-10 xl:p-12
-        select-none
-      "
+    <div className="relative hidden min-h-screen overflow-hidden bg-cover bg-center bg-no-repeat lg:flex lg:w-2/5 lg:shrink-0 flex-col justify-between p-8 sm:p-10 xl:p-12 select-none"
       style={{ backgroundImage: "url('/bg-img.png')" }}
     >
       {/* Overlay */}

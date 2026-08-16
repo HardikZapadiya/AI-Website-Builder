@@ -98,7 +98,7 @@ export function AppContextProvider({ children }) {
     setLoadingProjects(false);
   };
 
-  const loadProject = async (id, silent = false) => {
+  const loadProject = useCallback(async (id, silent = false) => {
     if (!user) return;
     if (!silent) setLoadingActiveProject(true);
     try {
@@ -116,7 +116,7 @@ export function AppContextProvider({ children }) {
       console.log("loadProject Error", err);
     }
     setLoadingActiveProject(false);
-  };
+  }, [user]);
 
   useEffect(() => {
     if (!activeProject?._id || !user) return;
