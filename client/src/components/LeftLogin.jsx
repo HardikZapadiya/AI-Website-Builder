@@ -1,3 +1,7 @@
+/**
+ * Render the branded promotional panel on the left side of the login page.
+ * @returns {JSX.Element} The login page's left promotional panel.
+ */
 function LoginLeft() {
   return (
     <div
