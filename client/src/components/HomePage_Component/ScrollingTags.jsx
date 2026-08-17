@@ -3,7 +3,7 @@ import { homeTags } from "../../assets/assets";
 const ScrollingTags = ({ handleGenerate, generatingProject }) => {
   return (
     <div className=" masked-marquee w-full mt-4 max-w-2xl overflow-hidden py-1">
-      <div className="animate-marquee flex item-center w-max gap-3">
+      <div className="animate-marquee flex items-center w-max gap-3">
         {[...homeTags, ...homeTags].map((tag, i) => (
           <button
             key={i}

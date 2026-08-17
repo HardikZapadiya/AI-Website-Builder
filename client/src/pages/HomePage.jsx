@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 import { useAppContext } from "../context/AppContex";
-import PromptInput from "../components/HomePage_Component/PromptInput";
+import PromptInput from "../components/PromptInput";
 import ProjectGrid from "../components/HomePage_Component/ProjectGrid";
 import Navbar from "../components/HomePage_Component/Navbar";
 import ScrollingTags from "../components/HomePage_Component/ScrollingTags";
@@ -24,7 +24,7 @@ const HomePage = () => {
 
   return (
     <div
-      className="relative  min-h-screen overflow-hidden bg-cover bg-center bg-no-repeat flext flex-col select-none"
+      className="relative min-h-screen overflow-hidden bg-cover bg-center bg-no-repeat flex flex-col select-none"
       style={{ backgroundImage: "url('/bg-img.png')" }}
     >
       <Navbar user={user} logout={logout} />

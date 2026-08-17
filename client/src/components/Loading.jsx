@@ -4,7 +4,7 @@ function Loading() {
   return (
     <div
       role="status"
-      arial-label="Loading"
+      aria-label="Loading"
       className="h-screen flex items-center justify-center bg-white"
     >
       <Loader size={26} className="animate-spin text-zinc-950" />

@@ -5,6 +5,7 @@ import {
   useEffect,
   useCallback,
 } from "react";
+
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
@@ -167,6 +168,26 @@ export function AppContextProvider({ children }) {
     },
     [user],
   );
+
+
+  const handleChat = useCallback(
+    async (prompt) => {
+      if (!activeProject || !user) return;
+      setChatLoading = true;
+      try {
+        const { data } = await api.post(`/api/projects/${activeProject._id}/chat`,{ prompt });
+        setActiveProject(data);
+        if (data.errors && data.errors.length > 0) {
+          toast.error(`${data.errors.length} revision patch(es) failed`);
+        } else {
+          toast.success(`Updates to version ${data.version}`);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+      setChatLoading(false);
+    }
+  ) 
 
   return (
     <AppContext.Provider
