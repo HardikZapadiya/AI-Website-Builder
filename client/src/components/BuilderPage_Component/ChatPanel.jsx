@@ -9,7 +9,7 @@ function ChatPanel({ messages, onSend, loading }) {
   }, [messages, loading]);
 
   return (
-    <div className="flex flex-col bg-white">
+    <div className="flex flex-col h-full bg-white">
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-3 space-y-3 hide-scrollbar">
         {messages.length === 0 && (
@@ -21,7 +21,7 @@ function ChatPanel({ messages, onSend, loading }) {
         )}
         {messages.map((msg, idx) => {
           return (
-            <div key={idx} className="flex gap-2.5 items-start">
+            <div key={idx} className="flex gap-2.5 items-start ">
               <div className="shrink-0 w-6 h-6 rounded-md flex items-center justify-center mt-0.5 bg-zinc-50">
                 {msg.role === "user" ? (
                   <UserIcon size={14} className="text-zinc-700" />
@@ -49,13 +49,18 @@ function ChatPanel({ messages, onSend, loading }) {
         })}
         {loading && (
           <div className="flex gap-2.5 items-start">
-            <div className="flex-1">
+            <div className="shrink-0 w-6 h-6 rounded-md flex items-center justify-center mt-0.5 bg-zinc-900/5">
               <BotIcon size={13} className="text-zinc-900" />
             </div>
-            <div className="dot-loader">
-              <span></span>
-              <span></span>
-              <span></span>
+            <div className="flex-1">
+              <p className="text-[11px] font-medium text-zinc-400 mb-2 uppercase tracking-wider">
+                AI
+              </p>
+              <div className="dot-loader">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
             </div>
           </div>
         )}
@@ -63,7 +68,7 @@ function ChatPanel({ messages, onSend, loading }) {
       </div>
 
       {/* Input */}
-      <div>
+      <div className="p-3 border-t border-zinc-200">
         <PromptInput
           onSubmit={onSend}
           loading={loading}
