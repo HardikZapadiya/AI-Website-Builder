@@ -9,11 +9,13 @@ function LoginLeft() {
 
       {/* Logo */}
       <div className="relative z-10 flex items-center gap-3">
-        <img src="/logo.svg" alt="" className="size-9" />
+        <img src="/logo.svg" alt="Builder AI" className="w-9 h-9" />
 
         <span className="text-2xl xl:text-3xl font-semibold tracking-tight text-white">
-          Builder AI{" "}
-          <sup className="font-sans text-[10px] text-amber-200">[HD]</sup>
+          Builder AI
+          <sup className="ml-0.5 font-sans text-[9px] font-medium text-amber-200 align-super">
+            [HD]
+          </sup>
         </span>
       </div>
 
