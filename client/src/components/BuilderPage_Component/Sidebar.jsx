@@ -6,15 +6,17 @@ const Sidebar = ({
   leftTab,
   setLeftTab,
   messages,
+  activeProject,
+  activeFile,
+  setActiveFile,
+  setShowCode,
   handleChat,
   chatLoading,
 }) => {
   return (
-    <div>
-      <div className="w-[320px] shrink-0 flex flex-col border-r border-zinc-200 bg-white">
-        {/* Sidebar tabs */}
-        <div className="flex border-b border-zinc-100">
-          {/* ChatBot part */}
+    <div className="h-full shrink-0">
+      <div className="h-full w-[320px] shrink-0 flex flex-col border-r border-zinc-200 bg-white">
+        <div className="flex shrink-0 border-b border-zinc-100">
           <button
             onClick={() => setLeftTab("chat")}
             className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium cursor-pointer ${leftTab === "chat" ? "text-zinc-900 border-b-2 border-zinc-900" : "text-zinc-400 hover:text-zinc-700"}`}
@@ -23,7 +25,6 @@ const Sidebar = ({
             Chat
           </button>
 
-          {/* File Part */}
           <button
             onClick={() => setLeftTab("files")}
             className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium cursor-pointer ${leftTab === "files" ? "text-zinc-900 border-b-2 border-zinc-900" : "text-zinc-400 hover:text-zinc-700"}`}
@@ -33,10 +34,9 @@ const Sidebar = ({
           </button>
         </div>
 
-        {/* Sidebar Content */}
-        <div className="flex-1 overflow-hidden flex flex-col">
+        <div className="flex-1 min-h-0 overflow-hidden flex flex-col">
           {leftTab === "chat" ? (
-            <div>
+            <div className="h-full min-h-0">
               <ChatPanel
                 messages={messages}
                 onSend={handleChat}
@@ -44,8 +44,15 @@ const Sidebar = ({
               />
             </div>
           ) : (
-            <div>
-              <FileExplore />
+            <div className="h-full min-h-0">
+              <FileExplore
+                files={activeProject?.files ?? {}}
+                activeFile={activeFile}
+                onFileSelect={(path) => {
+                  setActiveFile(path);
+                  setShowCode(true);
+                }}
+              />
             </div>
           )}
         </div>

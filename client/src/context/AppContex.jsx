@@ -12,6 +12,18 @@ import api from "../api/api";
 
 const AppContext = createContext(undefined);
 
+const normalizeUser = (userData) => {
+  if (!userData) return null;
+
+  const rawName = typeof userData.name === "string" ? userData.name.trim() : "";
+  const displayName = rawName.includes("@") ? rawName.split("@")[0] : rawName;
+
+  return {
+    ...userData,
+    name: displayName || userData.email?.split("@")[0] || "User",
+  };
+};
+
 export function AppContextProvider({ children }) {
   const navigate = useNavigate();
   //Auth states
@@ -33,7 +45,7 @@ export function AppContextProvider({ children }) {
     const checkSession = async () => {
       try {
         const { data } = await api.get("/api/auth/me");
-        setUser(data.user ?? null);
+        setUser(normalizeUser(data.user ?? null));
       } catch {
         setUser(null);
       } finally {
@@ -47,7 +59,7 @@ export function AppContextProvider({ children }) {
   const login = async (email, password) => {
     try {
       const { data } = await api.post("/api/auth/login", { email, password });
-      setUser(data.user);
+      setUser(normalizeUser(data.user));
       toast.success("welocome back");
       navigate("/");
     } catch (err) {
@@ -64,7 +76,7 @@ export function AppContextProvider({ children }) {
         password,
         confirmPassword,
       });
-      setUser(data.user);
+      setUser(normalizeUser(data.user));
       toast.success("Account created Successfully!");
       navigate("/");
     } catch (err) {
@@ -99,25 +111,28 @@ export function AppContextProvider({ children }) {
     setLoadingProjects(false);
   };
 
-  const loadProject = useCallback(async (id, silent = false) => {
-    if (!user) return;
-    if (!silent) setLoadingActiveProject(true);
-    try {
-      const { data } = await api.get(`/api/projects/${id}`);
-      setActiveProject(data);
-      const files = Object.keys(data.files);
-      if (files.length > 0) {
-        setActiveFile((prev) => {
-          if (files.includes(prev)) return prev;
-          if (files.includes("/App.js")) return "/App.js";
-          return files[0];
-        });
+  const loadProject = useCallback(
+    async (id, silent = false) => {
+      if (!user) return;
+      if (!silent) setLoadingActiveProject(true);
+      try {
+        const { data } = await api.get(`/api/projects/${id}`);
+        setActiveProject(data);
+        const files = Object.keys(data.files);
+        if (files.length > 0) {
+          setActiveFile((prev) => {
+            if (files.includes(prev)) return prev;
+            if (files.includes("/App.js")) return "/App.js";
+            return files[0];
+          });
+        }
+      } catch (err) {
+        console.log("loadProject Error", err);
       }
-    } catch (err) {
-      console.log("loadProject Error", err);
-    }
-    setLoadingActiveProject(false);
-  }, [user]);
+      setLoadingActiveProject(false);
+    },
+    [user],
+  );
 
   useEffect(() => {
     if (!activeProject?._id || !user) return;
@@ -169,25 +184,34 @@ export function AppContextProvider({ children }) {
     [user],
   );
 
-
   const handleChat = useCallback(
     async (prompt) => {
-      if (!activeProject || !user) return;
-      setChatLoading = true;
+      if (!activeProject || !user) return false;
+      setChatLoading(true);
       try {
-        const { data } = await api.post(`/api/projects/${activeProject._id}/chat`,{ prompt });
+        const { data } = await api.post(
+          `/api/projects/${activeProject._id}/chat`,
+          {
+            prompt,
+          },
+        );
         setActiveProject(data);
         if (data.errors && data.errors.length > 0) {
           toast.error(`${data.errors.length} revision patch(es) failed`);
         } else {
           toast.success(`Updates to version ${data.version}`);
         }
+        return true;
       } catch (err) {
-        console.log(err);
+        console.log("handleChat Error", err);
+        toast.error("Could not update your site. Try again.");
+        return false;
+      } finally {
+        setChatLoading(false);
       }
-      setChatLoading(false);
-    }
-  ) 
+    },
+    [activeProject, user],
+  );
 
   return (
     <AppContext.Provider
@@ -210,6 +234,8 @@ export function AppContextProvider({ children }) {
         loadProjects,
         handleGenerate,
         handleDelete,
+        handleChat,
+        logout,
       }}
     >
       {children}

@@ -76,6 +76,10 @@ function BuilderPage() {
           leftTab={leftTab}
           setLeftTab={setLeftTab}
           messages={activeProject.messages}
+          activeProject={activeProject}
+          activeFile={activeFile}
+          setActiveFile={setActiveFile}
+          setShowCode={setShowCode}
           handleChat={handleChat}
           chatLoading={chatLoading}
         />

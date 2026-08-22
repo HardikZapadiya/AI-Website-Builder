@@ -27,12 +27,12 @@ function PromptInput({
     el.style.height = `${Math.min(el.scrollHeight, 240)}px`;
   }, [value]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e?.preventDefault();
     const trimmed = value.trim();
     if (!trimmed || loading) return;
-    onSubmit(trimmed);
-    setValue("");
+    const submitted = await onSubmit(trimmed);
+    if (submitted !== false) setValue("");
   };
 
   const handleKeyDown = (e) => {
@@ -57,6 +57,7 @@ function PromptInput({
       type={isGlass ? "submit" : "button"}
       onClick={isGlass ? undefined : () => handleSubmit()}
       disabled={!value.trim() || loading}
+      aria-label={loading ? "Sending message" : "Send message"}
       className={
         isGlass
           ? "flex items-center justify-center p-1 text-white/50 hover:text-white  cursor-pointer"

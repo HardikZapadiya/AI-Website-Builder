@@ -1,6 +1,11 @@
 import { useEffect, useRef } from "react";
 import PromptInput from "../../components/PromptInput";
-import { BotMessageSquareIcon, UserIcon, BotIcon } from "lucide-react";
+import {
+  BotMessageSquareIcon,
+  UserIcon,
+  BotIcon,
+  SparklesIcon,
+} from "lucide-react";
 
 function ChatPanel({ messages, onSend, loading }) {
   const bottomRef = useRef(null);
@@ -11,20 +16,31 @@ function ChatPanel({ messages, onSend, loading }) {
   return (
     <div className="flex flex-col h-full bg-white">
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-3 hide-scrollbar">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 hide-scrollbar">
         {messages.length === 0 && (
-          <div className="flex items-center justify-center h-full">
-            <p className="text-zinc-400 text-sm text-center ">
-              Ask AI to modify your website
+          <div className="flex flex-col items-center justify-center h-full px-5 text-center animate-fade-in-up">
+            <div className="flex items-center justify-center w-10 h-10 mb-3 rounded-xl bg-zinc-100 text-zinc-700">
+              <SparklesIcon size={18} />
+            </div>
+            <p className="text-sm font-medium text-zinc-800">
+              What should we improve?
+            </p>
+            <p className="max-w-55 mt-1 text-xs leading-relaxed text-zinc-400">
+              Describe a change and the AI agent will update your site.
             </p>
           </div>
         )}
         {messages.map((msg, idx) => {
           return (
-            <div key={idx} className="flex gap-2.5 items-start ">
-              <div className="shrink-0 w-6 h-6 rounded-md flex items-center justify-center mt-0.5 bg-zinc-50">
+            <div
+              key={idx}
+              className="flex gap-2.5 items-start animate-fade-in-up"
+            >
+              <div
+                className={`shrink-0 w-6 h-6 rounded-md flex items-center justify-center mt-0.5 ${msg.role === "user" ? "bg-zinc-900" : "bg-zinc-100"}`}
+              >
                 {msg.role === "user" ? (
-                  <UserIcon size={14} className="text-zinc-700" />
+                  <UserIcon size={14} className="text-white" />
                 ) : (
                   <BotMessageSquareIcon size={14} className="text-zinc-700" />
                 )}
@@ -33,7 +49,7 @@ function ChatPanel({ messages, onSend, loading }) {
                 <p className="text-xs font-medium text-zinc-500 mb-1 uppercase tracking-wider">
                   {msg.role === "user" ? "You" : "AI"}
                 </p>
-                <p className="text-[13px] text-zinc-700 leading-relaxed tracking-wider whitespace-pre-wrap break-words">
+                <p className="text-[13px] text-zinc-700 leading-relaxed tracking-wider whitespace-pre-wrap wrap-break-word">
                   {msg.content.split("- `/").map((text, idx) => {
                     return (
                       <span key={idx} className="block mt-3">
@@ -56,7 +72,11 @@ function ChatPanel({ messages, onSend, loading }) {
               <p className="text-[11px] font-medium text-zinc-400 mb-2 uppercase tracking-wider">
                 AI
               </p>
-              <div className="dot-loader">
+              <div
+                className="dot-loader"
+                role="status"
+                aria-label="AI is thinking"
+              >
                 <span></span>
                 <span></span>
                 <span></span>

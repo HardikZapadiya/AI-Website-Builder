@@ -1,4 +1,8 @@
 const Navbar = ({ user, logout }) => {
+  const displayName = user?.name?.includes("@")
+    ? user.name.split("@")[0]
+    : user?.name || "User";
+
   return (
     <nav className="sticky top-0 z-10 flex items-center justify-between px-6 py-4">
       <div className="flex items-center gap-2">
@@ -9,8 +13,9 @@ const Navbar = ({ user, logout }) => {
         </span>
       </div>
       <div className="flex items-center gap-4 text-sm font-medium text-zinc-300">
-        <span>{user?.name}</span>
+        <span>{displayName}</span>
         <button
+          type="button"
           onClick={logout}
           className="py-1.5 px-3 border border-white/20 text-white hover:bg-white/10 text-xs rounded-md cursor-pointer bg-transparent"
         >
